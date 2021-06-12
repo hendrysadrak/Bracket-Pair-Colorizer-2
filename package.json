@@ -1,9 +1,9 @@
 {
-    "name": "bracket-pair-colorizer-2",
-    "displayName": "Bracket Pair Colorizer 2",
+    "name": "performant-bracket-pair-colorizer-2",
+    "displayName": "Performant Bracket Pair Colorizer 2",
     "description": "A customizable extension for colorizing matching brackets",
     "version": "0.1.6",
-    "publisher": "CoenraadS",
+    "publisher": "jpcastberg",
     "engines": {
         "vscode": "^1.45.0"
     },
@@ -181,7 +181,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/CoenraadS/Bracket-Pair-Colorizer-2"
+        "url": "https://github.com/jpcastberg/Performant-Bracket-Pair-Colorizer-2"
     },
     "license": "SEE LICENSE IN LICENSE.md",
     "dependencies": {
