@@ -154,6 +154,12 @@
                     "description": "CSS for the scope line. Use {color} to match the bracket color. The string types listed at https://code.visualstudio.com/docs/extensionAPI/vscode-api#DecorationRenderOptions can be used",
                     "scope": "window"
                 },
+                "bracket-pair-colorizer-2.timeOutLength": {
+                    "type": "integer",
+                    "default": 200,
+                    "description": "Configure how long the editor should be idle for before updating the document",
+                    "scope": "window"
+                },
                 "bracket-pair-colorizer-2.excludedLanguages": {
                     "type": "array",
                     "default": [],
