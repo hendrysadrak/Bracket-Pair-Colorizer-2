@@ -143,37 +143,37 @@ export default class DocumentDecoration {
 
     public tokenizeDocument() {
         clearTimeout(this.timeout);
-        this.timeout = setTimeout(executeTokenization.bind(this), this.settings.timeOutLength);
+        this.timeout = setTimeout(() => this.executeTokenization(), this.settings.timeOutLength);       
+    }
 
-        function executeTokenization() {
-            // console.log("Tokenizing " + this.document.fileName);
+    public executeTokenization() {
+        // console.log("Tokenizing " + this.document.fileName);
 
-            // One document may be shared by multiple editors (side by side view)
-            const editors: vscode.TextEditor[] =
-                vscode.window.visibleTextEditors.filter((e) => this.document === e.document);
+        // One document may be shared by multiple editors (side by side view)
+        const editors: vscode.TextEditor[] =
+            vscode.window.visibleTextEditors.filter((e) => this.document === e.document);
 
-            if (editors.length === 0) {
-                console.warn("No editors associated with document: " + this.document.fileName);
-                return;
-            }
-
-            // console.time("tokenizeDocument");
-
-            const lineIndex = this.lines.length;
-            const lineCount = this.document.lineCount;
-            if (lineIndex < lineCount) {
-                // console.log("Reparse from line: " + (lineIndex + 1));
-                for (let i = lineIndex; i < lineCount; i++) {
-                    const newLine = this.tokenizeLine(i);
-                    this.lines.push(newLine);
-                }
-            }
-
-            // console.log("Coloring document");
-            this.colorDecorations(editors);
-
-            // console.timeEnd("tokenizeDocument");
+        if (editors.length === 0) {
+            console.warn("No editors associated with document: " + this.document.fileName);
+            return;
         }
+
+        // console.time("tokenizeDocument");
+
+        const lineIndex = this.lines.length;
+        const lineCount = this.document.lineCount;
+        if (lineIndex < lineCount) {
+            // console.log("Reparse from line: " + (lineIndex + 1));
+            for (let i = lineIndex; i < lineCount; i++) {
+                const newLine = this.tokenizeLine(i);
+                this.lines.push(newLine);
+            }
+        }
+
+        // console.log("Coloring document");
+        this.colorDecorations(editors);
+
+        // console.timeEnd("tokenizeDocument");
     }
 
     public updateScopeDecorations(event: vscode.TextEditorSelectionChangeEvent) {
