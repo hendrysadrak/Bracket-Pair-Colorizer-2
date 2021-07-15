@@ -2,7 +2,7 @@
     "name": "bracket-pair-colorizer-2",
     "displayName": "Bracket Pair Colorizer 2 - Hendry's Mashup",
     "description": "A customizable extension for colorizing matching brackets",
-    "version": "0.2.3",
+    "version": "0.2.4",
     "publisher": "hendrysadrak",
     "engines": {
         "vscode": "^1.45.0"
