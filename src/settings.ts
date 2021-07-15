@@ -104,6 +104,12 @@ export default class Settings {
             throw new Error("rulerPosition is not a string");
         }
 
+        this.timeOutLength = configuration.get("timeOutLength") as number;
+
+        if (typeof this.timeOutLength !== "number" || this.timeOutLength < 1) {
+            throw new Error("timeOutLength must be a positive integer");
+        }
+
         this.unmatchedScopeColor = configuration.get("unmatchedScopeColor") as string;
 
         if (typeof this.unmatchedScopeColor !== "string") {
