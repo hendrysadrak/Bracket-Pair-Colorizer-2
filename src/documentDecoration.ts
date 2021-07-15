@@ -140,15 +140,15 @@ export default class DocumentDecoration {
     public async tokenizeDocument() {
         clearTimeout(this.timeout);
 
-        const deferred = getDeferred();
+        // const deferred = getDeferred();
 
         this.timeout = setTimeout(() => {
             this.executeTokenizeDocument();
 
-            deferred.resolve();
+            // deferred.resolve();
         }, this.settings.timeOutLength);
 
-        await deferred.promise;
+        // await deferred.promise;
     }
 
     private executeTokenizeDocument() {
