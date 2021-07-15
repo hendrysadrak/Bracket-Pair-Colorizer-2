@@ -84,40 +84,45 @@ export default class DocumentDecorationManager {
     }
 
     private getDocumentDecorations(document: TextDocument): DocumentDecoration | undefined {
-        if (!this.isValidDocument(document)) {
+        if (this.isValidDocument(document) === false) return;
+
+        const uri = document.uri.toString();
+
+        // console.log("Looking for " + uri + " from cache");
+        const documentDecoration = this.documents.get(uri);
+
+        if (documentDecoration) {
+            // console.log("Retrieved " + uri + " from cache");
+
+            return documentDecoration;
+        }
+
+        const languageConfig = this.tryGetLanguageConfig(document.languageId);
+
+        if (!languageConfig) {
+            // console.log("Could not find tokenizer for " + document.languageId);
             return;
         }
 
-        const uri = document.uri.toString();
-        // console.log("Looking for " + uri + " from cache");
-        let documentDecorations = this.documents.get(uri);
+        if (languageConfig instanceof Promise) {
+            // console.log("Found Tokenizer promise for " + document.languageId);
+            languageConfig.then(grammar => {
+                if (grammar) {
+                    this.updateDocument(document);
+                }
+            });
 
-        if (documentDecorations === undefined) {
-            const languageConfig = this.tryGetLanguageConfig(document.languageId);
-            if (!languageConfig) {
-                // console.log("Could not find tokenizer for " + document.languageId);
-                return;
-            }
-
-            if (languageConfig instanceof Promise) {
-                // console.log("Found Tokenizer promise for " + document.languageId);
-                languageConfig.then(grammar => {
-                    if (grammar) {
-                        this.updateDocument(document);
-                    }
-                });
-                return;
-            }
-
-            // console.log("Found Tokenizer for " + document.languageId);
-
-            documentDecorations = new DocumentDecoration(document, languageConfig, this.settings);
-            // console.log("Adding " + uri + " to cache");
-            this.documents.set(uri, documentDecorations);
+            return;
         }
 
-        // console.log("Retrieved " + uri + " from cache");
-        return documentDecorations;
+        // console.log("Found Tokenizer for " + document.languageId);
+
+        const newDocumentDecoration = new DocumentDecoration(document, languageConfig, this.settings);
+
+        // console.log("Adding " + uri + " to cache");
+        this.documents.set(uri, newDocumentDecoration);
+
+        return newDocumentDecoration;
     }
 
     private tryGetLanguageConfig(languageID: string) {

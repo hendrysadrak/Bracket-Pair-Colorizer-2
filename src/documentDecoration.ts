@@ -8,6 +8,7 @@ import Settings from "./settings";
 import TextLine from "./textLine";
 import { ignoreBracketsInToken, LineTokens } from "./vscodeFiles";
 import { TextDocumentContentChangeEvent } from "vscode";
+import { getDeferred } from "./deferred";
 
 export default class DocumentDecoration {
     public readonly settings: Settings;
@@ -42,7 +43,9 @@ export default class DocumentDecoration {
             } else {
                 this.lines.splice(minLineIndexToUpdate);
             }
+
             this.tokenizeDocument();
+
             return;
         }
 
@@ -61,7 +64,9 @@ export default class DocumentDecoration {
         ) {
             this.lines[lineNumber] = newLine;
             this.lines.splice(lineNumber + 1);
+
             this.tokenizeDocument();
+
             return;
         }
 
@@ -132,12 +137,21 @@ export default class DocumentDecoration {
         }
     }
 
-    public tokenizeDocument() {
+    public async tokenizeDocument() {
         clearTimeout(this.timeout);
-        this.timeout = setTimeout(() => this.executeTokenizeDocument(), this.settings.timeOutLength);
+
+        const deferred = getDeferred();
+
+        this.timeout = setTimeout(() => {
+            this.executeTokenizeDocument();
+
+            deferred.resolve();
+        }, this.settings.timeOutLength);
+
+        await deferred.promise;
     }
 
-    public executeTokenizeDocument() {
+    private executeTokenizeDocument() {
         // console.log("Tokenizing " + this.document.fileName);
 
         // One document may be shared by multiple editors (side by side view)
@@ -176,9 +190,8 @@ export default class DocumentDecoration {
         const selection = event.textEditor.selection;
 
         const closeBracket = this.searchScopeForwards(selection.active);
-        if (!closeBracket) {
-            return;
-        }
+
+        if (!closeBracket) return;
 
         const openBracket = closeBracket.openBracket;
         const beginRange = openBracket.token.range;
