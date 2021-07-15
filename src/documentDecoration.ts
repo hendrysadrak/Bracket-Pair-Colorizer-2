@@ -134,10 +134,10 @@ export default class DocumentDecoration {
 
     public tokenizeDocument() {
         clearTimeout(this.timeout);
-        this.timeout = setTimeout(() => this.executeTokenization(), this.settings.timeOutLength);
+        this.timeout = setTimeout(() => this.executeTokenizeDocument(), this.settings.timeOutLength);
     }
 
-    public executeTokenization() {
+    public executeTokenizeDocument() {
         // console.log("Tokenizing " + this.document.fileName);
 
         // One document may be shared by multiple editors (side by side view)
