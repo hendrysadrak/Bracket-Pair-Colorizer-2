@@ -9,10 +9,7 @@ export default class TextLine {
     private lineState: LineState;
     private readonly ruleStack: IStackElement;
 
-    constructor(
-        ruleStack: IStackElement,
-        lineState: LineState,
-        index: number) {
+    constructor(ruleStack: IStackElement, lineState: LineState, index: number) {
         this.lineState = lineState;
         this.ruleStack = ruleStack;
         this.index = index;
@@ -31,12 +28,7 @@ export default class TextLine {
         return this.lineState.getBracketHash();
     }
 
-    public AddToken(
-        currentChar: string,
-        index: number,
-        key: number,
-        open: boolean,
-    ) {
+    public AddToken(currentChar: string, index: number, key: number, open: boolean) {
         this.lineState.addBracket(key, currentChar, index, this.index, open);
     }
 

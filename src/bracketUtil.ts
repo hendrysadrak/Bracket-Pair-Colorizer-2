@@ -4,9 +4,9 @@ interface ISimpleInternalBracket {
 }
 
 export function getRegexForBrackets(input: ISimpleInternalBracket[]): RegExp {
-    const longestFirst = input.sort((a, b) => (b.open.length + b.close.length) - (a.open.length + a.close.length));
+    const longestFirst = input.sort((a, b) => b.open.length + b.close.length - (a.open.length + a.close.length));
     const pieces: string[] = [];
-    longestFirst.forEach((b) => {
+    longestFirst.forEach(b => {
         pieces.push(b.open);
         pieces.push(b.close);
     });
@@ -20,9 +20,9 @@ function createBracketOrRegExp(pieces: string[]): RegExp {
 
 function prepareBracketForRegExp(str: string): string {
     // This bracket pair uses letters like e.g. "begin" - "end"
-    const insertWordBoundaries = (/^[\w]+$/.test(str));
+    const insertWordBoundaries = /^[\w]+$/.test(str);
     str = escapeRegExpCharacters(str);
-    return (insertWordBoundaries ? `\\b${str}\\b` : str);
+    return insertWordBoundaries ? `\\b${str}\\b` : str;
 }
 
 function escapeRegExpCharacters(value: string): string {

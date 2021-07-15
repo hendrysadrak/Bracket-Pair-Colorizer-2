@@ -15,10 +15,10 @@ export default class SingularBracketGroup implements IBracketManager {
     constructor(
         settings: Settings,
         previousState?: {
-            currentOpenBracketColorIndexes: Bracket[],
-            previousOpenBracketColorIndex: number,
-        }) {
-
+            currentOpenBracketColorIndexes: Bracket[];
+            previousOpenBracketColorIndex: number;
+        },
+    ) {
         this.settings = settings;
 
         if (previousState !== undefined) {
@@ -71,8 +71,10 @@ export default class SingularBracketGroup implements IBracketManager {
 
             const closeBracket = bracket as BracketClose;
             const openBracket = closeBracket.openBracket;
-            const range =
-                new Range(openBracket.token.range.start.translate(0, 1), closeBracket.token.range.end.translate(0, -1));
+            const range = new Range(
+                openBracket.token.range.start.translate(0, 1),
+                closeBracket.token.range.end.translate(0, -1),
+            );
 
             if (range.contains(position)) {
                 return closeBracket;
@@ -93,11 +95,9 @@ export default class SingularBracketGroup implements IBracketManager {
     }
 
     public copyCumulativeState() {
-        return new SingularBracketGroup(
-            this.settings,
-            {
-                currentOpenBracketColorIndexes: this.allLinesOpenBracketStack.slice(),
-                previousOpenBracketColorIndex: this.previousOpenBracketColorIndex,
-            });
+        return new SingularBracketGroup(this.settings, {
+            currentOpenBracketColorIndexes: this.allLinesOpenBracketStack.slice(),
+            previousOpenBracketColorIndex: this.previousOpenBracketColorIndex,
+        });
     }
 }

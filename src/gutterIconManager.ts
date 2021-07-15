@@ -17,7 +17,7 @@ export default class GutterIconManager {
     }
 
     public Dispose() {
-        this.disposables.forEach((callback) => {
+        this.disposables.forEach(callback => {
             callback();
         });
 
@@ -31,14 +31,12 @@ export default class GutterIconManager {
             const uri = colorDict.get(color);
             if (uri) {
                 return uri;
-            }
-            else {
+            } else {
                 const newUri = this.createIcon(color, bracket);
                 colorDict.set(color, newUri);
                 return newUri;
             }
-        }
-        else {
+        } else {
             const newUri = this.createIcon(color, bracket);
             const dict = new Map<string, Uri>();
             dict.set(color, newUri);
@@ -66,7 +64,7 @@ export default class GutterIconManager {
     private readEditorLineHeight() {
         const MINIMUM_LINE_HEIGHT = 8;
         const MAXIMUM_LINE_HEIGHT = 150;
-        const GOLDEN_LINE_HEIGHT_RATIO = (process.platform === "darwin") ? 1.5 : 1.35;
+        const GOLDEN_LINE_HEIGHT_RATIO = process.platform === "darwin" ? 1.5 : 1.35;
 
         const editorConfig = workspace.getConfiguration("editor", null);
         const fontSize = editorConfig.get("fontSize") as number;
@@ -101,6 +99,6 @@ export default class GutterIconManager {
             lineHeight = MINIMUM_LINE_HEIGHT;
         }
         this.lineHeight = lineHeight;
-        this.fontSize = Math.ceil(fontSize * (2/3));
+        this.fontSize = Math.ceil(fontSize * (2 / 3));
     }
 }

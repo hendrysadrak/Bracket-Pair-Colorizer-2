@@ -18,16 +18,16 @@ export default class MultipleBracketGroups implements IBracketManager {
         settings: Settings,
         languageConfig: LanguageConfig,
         previousState?: {
-            currentOpenBracketColorIndexes: Bracket[][],
-            previousOpenBracketColorIndexes: number[],
-        }) {
+            currentOpenBracketColorIndexes: Bracket[][];
+            previousOpenBracketColorIndexes: number[];
+        },
+    ) {
         this.settings = settings;
         this.languageConfig = languageConfig;
         if (previousState !== undefined) {
             this.allLinesOpenBracketStack = previousState.currentOpenBracketColorIndexes;
             this.previousOpenBracketColorIndexes = previousState.previousOpenBracketColorIndexes;
-        }
-        else {
+        } else {
             for (const value of languageConfig.bracketToId.values()) {
                 this.allLinesOpenBracketStack[value.key] = [];
                 this.previousOpenBracketColorIndexes[value.key] = 0;
@@ -78,8 +78,10 @@ export default class MultipleBracketGroups implements IBracketManager {
 
             const closeBracket = bracket as BracketClose;
             const openBracket = closeBracket.openBracket;
-            const range =
-                new Range(openBracket.token.range.start.translate(0, 1), closeBracket.token.range.end.translate(0, -1));
+            const range = new Range(
+                openBracket.token.range.start.translate(0, 1),
+                closeBracket.token.range.end.translate(0, -1),
+            );
 
             if (range.contains(position)) {
                 return closeBracket;
@@ -110,12 +112,9 @@ export default class MultipleBracketGroups implements IBracketManager {
             clone.push(value.slice());
         }
 
-        return new MultipleBracketGroups(
-            this.settings,
-            this.languageConfig,
-            {
-                currentOpenBracketColorIndexes: clone,
-                previousOpenBracketColorIndexes: this.previousOpenBracketColorIndexes.slice(),
-            });
+        return new MultipleBracketGroups(this.settings, this.languageConfig, {
+            currentOpenBracketColorIndexes: clone,
+            previousOpenBracketColorIndexes: this.previousOpenBracketColorIndexes.slice(),
+        });
     }
 }
